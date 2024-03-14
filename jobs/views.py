@@ -1,10 +1,17 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
+from jobs.models import Job
+import json
 
 # Create your views here.
 
 def home(request): 
-    return HttpResponse("Bienvenue sur obonjob")
+    job_list = Job.objects.all().values()
+
+    context = {
+        "jobs": job_list
+    }
+    return render(request,"index.html", context)
 
 def job_list(request):
     return HttpResponse("La liste des emplois disponibles")
