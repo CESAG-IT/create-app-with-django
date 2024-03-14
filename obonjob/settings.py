@@ -11,22 +11,30 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import environ
 import os
 import dj_database_url
+
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Take environment variables from .env file
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-g$by35x@tv^sixc)8*2ggnh*5@(ub*h2hz@6(jj3$sa+9z$z_+'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = ["create-app-with-django.onrender.com"]
+ALLOWED_HOSTS = env('APP_ALLOWED_HOST')
 
 
 # Application definition
@@ -88,7 +96,7 @@ else:
     DATABASES = {
         'default': dj_database_url.config(
             # Replace this value with your local database's connection string.
-            default='postgres://admin:J7gy0BSZCqynhr3vQi14PiuFyDVcMKTQ@dpg-cnplregcmk4c73bcvm00-a/obonjob',
+            default= env('DATABASE_URL'),
             conn_max_age=600
         )
     }
